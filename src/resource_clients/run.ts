@@ -1,18 +1,18 @@
-import { AxiosRequestConfig } from 'axios';
-import ow from 'ow';
+import type { AxiosRequestConfig } from 'axios';
 
-import { ActorRun } from './actor';
-import { DatasetClient } from './dataset';
-import { KeyValueStoreClient } from './key_value_store';
-import { LogClient } from './log';
-import { RequestQueueClient } from './request_queue';
-import { ApiClientOptionsWithOptionalResourcePath } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
+import type { ActorRun } from './actor.js';
+import { DatasetClient } from './dataset.js';
+import { KeyValueStoreClient } from './key_value_store.js';
+import { LogClient } from './log.js';
+import { RequestQueueClient } from './request_queue.js';
+import type { ApiClientOptionsWithOptionalResourcePath } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
+import ow from '../ow.js';
 import {
     pluckData,
     parseDateFields,
     cast,
-} from '../utils';
+} from '../utils.js';
 
 export class RunClient extends ResourceClient {
     /**

@@ -1,13 +1,13 @@
 import { ACT_JOB_STATUSES, ACT_JOB_TERMINAL_STATUSES } from '@apify/consts';
 
-import { ApiClient } from './api_client';
-import { ApifyApiError } from '../apify_api_error';
-import { ApifyRequestConfig } from '../http_client';
+import { ApiClient } from './api_client.js';
+import { ApifyApiError } from '../apify_api_error.js';
+import type { ApifyRequestConfig } from '../http_client.js';
 import {
     pluckData,
     parseDateFields,
     catchNotFoundOrThrow,
-} from '../utils';
+} from '../utils.js';
 
 /**
  * We need to supply some number for the API,
@@ -105,7 +105,7 @@ export class ResourceClient extends ApiClient {
 
         if (!job) {
             const constructorName = this.constructor.name;
-            const jobName = constructorName.match(/(\w+)Client/)![1].toLowerCase();
+            const jobName = constructorName.match(/(\w+)Client/)![1]!.toLowerCase();
             throw new Error(`Waiting for ${jobName} to finish failed. Cannot fetch actor ${jobName} details from the server.`);
         }
 

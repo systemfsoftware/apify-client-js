@@ -1,5 +1,5 @@
-import { ApifyClient } from '../apify_client';
-import { HttpClient } from '../http_client';
+import { ApifyClient } from '../apify_client.js';
+import { HttpClient } from '../http_client.js';
 
 /** @private */
 export interface ApiClientOptions {

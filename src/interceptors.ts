@@ -1,13 +1,13 @@
-import axios, { AxiosInterceptorManager, AxiosResponse, AxiosRequestTransformer, AxiosHeaders } from 'axios';
+import axios, { type AxiosInterceptorManager, type AxiosResponse, type AxiosRequestTransformer, AxiosHeaders } from 'axios';
 import contentTypeParser from 'content-type';
-import { JsonObject } from 'type-fest';
+import type { JsonObject } from 'type-fest';
 
-import { maybeParseBody } from './body_parser';
-import { ApifyRequestConfig, ApifyResponse } from './http_client';
+import { maybeParseBody } from './body_parser.js';
+import type { ApifyRequestConfig, ApifyResponse } from './http_client.js';
 import {
     isNode,
     maybeGzipValue,
-} from './utils';
+} from './utils.js';
 
 /**
  * This error exists for the quite common situation, where only a partial JSON response is received and

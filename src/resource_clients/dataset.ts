@@ -1,9 +1,8 @@
-import ow from 'ow';
-
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
-import { ApifyResponse } from '../http_client';
-import { cast, PaginatedList } from '../utils';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
+import type { ApifyResponse } from '../http_client.js';
+import ow from '../ow.js';
+import { cast, type PaginatedList } from '../utils.js';
 
 export class DatasetClient<
     Data extends Record<string | number, any> = Record<string | number, unknown>,

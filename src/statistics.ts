@@ -1,4 +1,4 @@
-import ow from 'ow';
+import ow from './ow.js';
 
 export class Statistics {
     /**
@@ -23,7 +23,7 @@ export class Statistics {
         // but we don't want index 0 empty
         const index = attempt - 1;
         this._fillBlanksWithZeroes(index);
-        this.rateLimitErrors[index]++;
+        this.rateLimitErrors[index]!++;
     }
 
     /**

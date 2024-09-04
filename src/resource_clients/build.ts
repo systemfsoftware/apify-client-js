@@ -1,14 +1,14 @@
 import { ACT_JOB_TERMINAL_STATUSES } from '@apify/consts';
-import ow from 'ow';
 
-import { LogClient } from './log';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
+import ow from '../ow.js';
+import { LogClient } from './log.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
 import {
     cast,
     parseDateFields,
     pluckData,
-} from '../utils';
+} from '../utils.js';
 
 export class BuildClient extends ResourceClient {
     /**

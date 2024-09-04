@@ -1,10 +1,9 @@
-import ow from 'ow';
-
-import { Actor, ActorDefaultRunOptions, ActorExampleRunInput, ActorStandby } from './actor';
-import { ActorVersion } from './actor_version';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceCollectionClient } from '../base/resource_collection_client';
-import { PaginatedList } from '../utils';
+import type { Actor, ActorDefaultRunOptions, ActorExampleRunInput, ActorStandby } from './actor.js';
+import type { ActorVersion } from './actor_version.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceCollectionClient } from '../base/resource_collection_client.js';
+import ow from '../ow.js';
+import type { PaginatedList } from '../utils.js';
 
 export class ActorCollectionClient extends ResourceCollectionClient {
     /**

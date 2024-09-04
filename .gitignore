@@ -27,3 +27,6 @@ crawlee_storage
 storage
 .turbo
 changelog.md
+
+.tshy
+.tshy-build

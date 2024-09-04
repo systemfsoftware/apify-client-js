@@ -1,13 +1,14 @@
 import type { Readable } from 'node:stream';
 
 import log from '@apify/log';
-import ow from 'ow';
-import { JsonValue } from 'type-fest';
+import { Schema as S } from '@effect/schema';
+import type { JsonValue } from 'type-fest';
 
-import { ApifyApiError } from '../apify_api_error';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
-import { ApifyRequestConfig } from '../http_client';
+import { ApifyApiError } from '../apify_api_error.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
+import type { ApifyRequestConfig } from '../http_client.js';
+import ow from '../ow.js';
 import {
     cast,
     catchNotFoundOrThrow,
@@ -16,7 +17,7 @@ import {
     isStream,
     parseDateFields,
     pluckData,
-} from '../utils';
+} from '../utils.js';
 
 export class KeyValueStoreClient extends ResourceClient {
     /**
@@ -39,7 +40,9 @@ export class KeyValueStoreClient extends ResourceClient {
     /**
      * https://docs.apify.com/api/v2#/reference/key-value-stores/store-object/update-store
      */
-    async update(newFields: KeyValueClientUpdateOptions): Promise<KeyValueStore> {
+    async update(
+        newFields: KeyValueClientUpdateOptions,
+    ): Promise<KeyValueStore> {
         ow(newFields, ow.object);
 
         return this._update(newFields);
@@ -55,11 +58,16 @@ export class KeyValueStoreClient extends ResourceClient {
     /**
      * https://docs.apify.com/api/v2#/reference/key-value-stores/key-collection/get-list-of-keys
      */
-    async listKeys(options: KeyValueClientListKeysOptions = {}): Promise<KeyValueClientListKeysResult> {
-        ow(options, ow.object.exactShape({
-            limit: ow.optional.number,
-            exclusiveStartKey: ow.optional.string,
-        }));
+    async listKeys(
+        options: KeyValueClientListKeysOptions = {},
+    ): Promise<KeyValueClientListKeysResult> {
+        ow(
+            options,
+            ow.object.exactShape({
+                limit: ow.optional.number,
+                exclusiveStartKey: ow.optional.string,
+            }),
+        );
 
         const response = await this.httpClient.call({
             url: this._url('keys'),
@@ -103,28 +111,42 @@ export class KeyValueStoreClient extends ResourceClient {
      * NOT resolve to a `KeyValueStore` record with an `undefined` value.
      * https://docs.apify.com/api/v2#/reference/key-value-stores/record/get-record
      */
-    async getRecord(key: string): Promise<KeyValueStoreRecord<JsonValue> | undefined>;
+    async getRecord(
+        key: string
+    ): Promise<KeyValueStoreRecord<JsonValue> | undefined>;
 
-    async getRecord<Options extends KeyValueClientGetRecordOptions = KeyValueClientGetRecordOptions>(
+    async getRecord<
+        Options extends KeyValueClientGetRecordOptions = KeyValueClientGetRecordOptions,
+    >(
         key: string,
         options: Options
     ): Promise<KeyValueStoreRecord<ReturnTypeFromOptions<Options>> | undefined>;
 
-    async getRecord(key: string, options: KeyValueClientGetRecordOptions = {}): Promise<KeyValueStoreRecord<unknown> | undefined> {
+    async getRecord(
+        key: string,
+        options: KeyValueClientGetRecordOptions = {},
+    ): Promise<KeyValueStoreRecord<unknown> | undefined> {
         ow(key, ow.string);
-        ow(options, ow.object.exactShape({
-            buffer: ow.optional.boolean,
-            stream: ow.optional.boolean,
-            disableRedirect: ow.optional.boolean,
-        }));
+        ow(
+            options,
+            ow.object.exactShape({
+                buffer: ow.optional.boolean,
+                stream: ow.optional.boolean,
+                disableRedirect: ow.optional.boolean,
+            }),
+        );
 
         if (options.stream && !isNode()) {
-            throw new Error('The stream option can only be used in Node.js environment.');
+            throw new Error(
+                'The stream option can only be used in Node.js environment.',
+            );
         }
 
         if ('disableRedirect' in options) {
-            log.deprecated('The disableRedirect option for getRecord() is deprecated. '
-                + 'It has no effect and will be removed in the following major release.');
+            log.deprecated(
+                'The disableRedirect option for getRecord() is deprecated. '
+                    + 'It has no effect and will be removed in the following major release.',
+            );
         }
 
         const requestOpts: Record<string, unknown> = {
@@ -162,11 +184,20 @@ export class KeyValueStoreClient extends ResourceClient {
      * https://docs.apify.com/api/v2#/reference/key-value-stores/record/put-record
      */
     async setRecord(record: KeyValueStoreRecord<JsonValue>): Promise<void> {
-        ow(record, ow.object.exactShape({
-            key: ow.string,
-            value: ow.any(ow.null, ow.string, ow.number, ow.object, ow.boolean),
-            contentType: ow.optional.string.nonEmpty,
-        }));
+        record = S.decodeSync(
+            S.Struct({
+                key: S.String,
+                value: S.Union(
+                    S.Null,
+                    S.String,
+                    S.Number,
+                    S.Struct({}),
+                    S.Boolean,
+                ),
+                contentType: S.optional(S.NonEmptyString),
+            }),
+            { onExcessProperty: 'preserve' },
+        )(record);
 
         const { key } = record;
         let { value, contentType } = record;
@@ -175,16 +206,23 @@ export class KeyValueStoreClient extends ResourceClient {
         // To allow saving Objects to JSON without providing content type
         if (!contentType) {
             if (isValueStreamOrBuffer) contentType = 'application/octet-stream';
-            else if (typeof value === 'string') contentType = 'text/plain; charset=utf-8';
-            else contentType = 'application/json; charset=utf-8';
+            else if (typeof value === 'string') {
+                contentType = 'text/plain; charset=utf-8';
+            } else contentType = 'application/json; charset=utf-8';
         }
 
         const isContentTypeJson = /^application\/json/.test(contentType);
-        if (isContentTypeJson && !isValueStreamOrBuffer && typeof value !== 'string') {
+        if (
+            isContentTypeJson
+            && !isValueStreamOrBuffer
+            && typeof value !== 'string'
+        ) {
             try {
                 value = JSON.stringify(value, null, 2);
             } catch (err) {
-                const msg = `The record value cannot be stringified to JSON. Please provide other content type.\nCause: ${(err as Error).message}`;
+                const msg = `The record value cannot be stringified to JSON. Please provide other content type.\nCause: ${
+                    (err as Error).message
+                }`;
                 throw new Error(msg);
             }
         }
@@ -270,6 +308,10 @@ export interface KeyValueStoreRecord<T> {
     contentType?: string;
 }
 
-export type ReturnTypeFromOptions<Options extends KeyValueClientGetRecordOptions> = Options['stream'] extends true
+export type ReturnTypeFromOptions<
+    Options extends KeyValueClientGetRecordOptions,
+> = Options['stream'] extends true
     ? Readable
-    : Options['buffer'] extends true ? Buffer : JsonValue;
+    : Options['buffer'] extends true
+    ? Buffer
+    : JsonValue;

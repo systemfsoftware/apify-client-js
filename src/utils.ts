@@ -2,15 +2,15 @@ import type { Readable } from 'node:stream';
 import util from 'util';
 import zlib from 'zlib';
 
-import ow from 'ow';
 import type { TypedArray, JsonValue } from 'type-fest';
 
-import { ApifyApiError } from './apify_api_error';
-import {
+import { ApifyApiError } from './apify_api_error.js';
+import ow from './ow.js';
+import type {
     RequestQueueClientListRequestsOptions,
     RequestQueueClientListRequestsResult,
-} from './resource_clients/request_queue';
-import { WebhookUpdateData } from './resource_clients/webhook';
+} from './resource_clients/request_queue.js';
+import type { WebhookUpdateData } from './resource_clients/webhook.js';
 
 const NOT_FOUND_STATUS_CODE = 404;
 const RECORD_NOT_FOUND_TYPE = 'record-not-found';
@@ -132,7 +132,7 @@ export function sliceArrayByByteLength<T>(array: T[], maxByteLength: number, sta
     const slicedArray: T[] = [];
     let byteLength = 2; // 2 bytes for the empty array []
     for (let i = 0; i < array.length; i++) {
-        const item = array[i];
+        const item = array[i]!;
         const itemByteSize = stringByteLength(JSON.stringify(item));
         if (itemByteSize > maxByteLength) {
             throw new Error(`RequestQueueClient.batchAddRequests: The size of the request with index: ${startIndex + i} `
@@ -202,7 +202,7 @@ export class PaginationIterator {
             iterateItemCount += page.items.length;
             // Limit reached stopping to iterate
             if (this.limit && iterateItemCount >= this.limit) return;
-            nextPageExclusiveStartId = page.items[page.items.length - 1].id;
+            nextPageExclusiveStartId = page.items[page.items.length - 1]!.id;
         }
     }
 }

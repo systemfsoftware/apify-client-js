@@ -1,9 +1,8 @@
-import ow from 'ow';
-
-import { Task, TaskUpdateData } from './task';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceCollectionClient } from '../base/resource_collection_client';
-import { PaginatedList } from '../utils';
+import type { Task, TaskUpdateData } from './task.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceCollectionClient } from '../base/resource_collection_client.js';
+import ow from '../ow.js';
+import type { PaginatedList } from '../utils.js';
 
 export class TaskCollectionClient extends ResourceCollectionClient {
     /**

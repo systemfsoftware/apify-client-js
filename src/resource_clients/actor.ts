@@ -1,23 +1,23 @@
 import { ACT_JOB_STATUSES, META_ORIGINS } from '@apify/consts';
-import { AxiosRequestConfig } from 'axios';
-import ow from 'ow';
+import type { AxiosRequestConfig } from 'axios';
 
-import { ActorVersion, ActorVersionClient } from './actor_version';
-import { ActorVersionCollectionClient } from './actor_version_collection';
-import { Build } from './build';
-import { BuildCollectionClient } from './build_collection';
-import { RunClient } from './run';
-import { RunCollectionClient } from './run_collection';
-import { WebhookUpdateData } from './webhook';
-import { WebhookCollectionClient } from './webhook_collection';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
+import ow from '../ow.js';
+import { type ActorVersion, ActorVersionClient } from './actor_version.js';
+import { ActorVersionCollectionClient } from './actor_version_collection.js';
+import type { Build } from './build.js';
+import { BuildCollectionClient } from './build_collection.js';
+import { RunClient } from './run.js';
+import { RunCollectionClient } from './run_collection.js';
+import type { WebhookUpdateData } from './webhook.js';
+import { WebhookCollectionClient } from './webhook_collection.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
 import {
     cast,
     parseDateFields,
     pluckData,
     stringifyWebhooksToBase64,
-} from '../utils';
+} from '../utils.js';
 
 export class ActorClient extends ResourceClient {
     /**

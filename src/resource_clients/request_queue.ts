@@ -1,12 +1,12 @@
 import { MAX_PAYLOAD_SIZE_BYTES, REQUEST_QUEUE_MAX_REQUESTS_PER_BATCH_OPERATION } from '@apify/consts';
 import log from '@apify/log';
-import ow from 'ow';
 import type { JsonObject } from 'type-fest';
 
-import { ApifyApiError } from '../apify_api_error';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
-import { ApifyRequestConfig } from '../http_client';
+import { ApifyApiError } from '../apify_api_error.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
+import type { ApifyRequestConfig } from '../http_client.js';
+import ow from '../ow.js';
 import {
     pluckData,
     parseDateFields,
@@ -14,7 +14,7 @@ import {
     cast,
     PaginationIterator,
     sliceArrayByByteLength,
-} from '../utils';
+} from '../utils.js';
 
 const DEFAULT_PARALLEL_BATCH_ADD_REQUESTS = 5;
 const DEFAULT_UNPROCESSED_RETRIES_BATCH_ADD_REQUESTS = 3;

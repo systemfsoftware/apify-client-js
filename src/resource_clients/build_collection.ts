@@ -1,9 +1,8 @@
-import ow from 'ow';
-
-import { Build } from './build';
-import { ApiClientOptionsWithOptionalResourcePath } from '../base/api_client';
-import { ResourceCollectionClient } from '../base/resource_collection_client';
-import { PaginatedList } from '../utils';
+import ow from '../ow.js';
+import type { Build } from './build.js';
+import type { ApiClientOptionsWithOptionalResourcePath } from '../base/api_client.js';
+import { ResourceCollectionClient } from '../base/resource_collection_client.js';
+import type { PaginatedList } from '../utils.js';
 
 export class BuildCollectionClient extends ResourceCollectionClient {
     /**

@@ -1,17 +1,16 @@
-import ow from 'ow';
-
-import { ApifyApiError } from '../apify_api_error';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
-import { ApifyRequestConfig } from '../http_client';
-import { Timezone } from '../timezones';
+import { ApifyApiError } from '../apify_api_error.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
+import type { ApifyRequestConfig } from '../http_client.js';
+import ow from '../ow.js';
+import type { Timezone } from '../timezones.js';
 import {
     pluckData,
     parseDateFields,
     catchNotFoundOrThrow,
     cast,
-    DistributiveOptional,
-} from '../utils';
+    type DistributiveOptional,
+} from '../utils.js';
 
 export class ScheduleClient extends ResourceClient {
     /**

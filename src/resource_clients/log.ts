@@ -1,13 +1,13 @@
 import type { Readable } from 'node:stream';
 
-import { ApifyApiError } from '../apify_api_error';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceClient } from '../base/resource_client';
-import { ApifyRequestConfig } from '../http_client';
+import { ApifyApiError } from '../apify_api_error.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceClient } from '../base/resource_client.js';
+import type { ApifyRequestConfig } from '../http_client.js';
 import {
     cast,
     catchNotFoundOrThrow,
-} from '../utils';
+} from '../utils.js';
 
 export class LogClient extends ResourceClient {
     /**

@@ -1,9 +1,8 @@
-import ow from 'ow';
-
-import { Dataset } from './dataset';
-import { ApiClientSubResourceOptions } from '../base/api_client';
-import { ResourceCollectionClient } from '../base/resource_collection_client';
-import { PaginatedList } from '../utils';
+import ow from '../ow.js';
+import type { Dataset } from './dataset.js';
+import type { ApiClientSubResourceOptions } from '../base/api_client.js';
+import { ResourceCollectionClient } from '../base/resource_collection_client.js';
+import type { PaginatedList } from '../utils.js';
 
 export class DatasetCollectionClient extends ResourceCollectionClient {
     /**
