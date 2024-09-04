@@ -164,7 +164,7 @@ export function getVersionData(): { version: string; } {
     }
 
     // eslint-disable-next-line
-    return require('../package.json');
+    return require('./package.json');
 }
 
 /**
